@@ -78,3 +78,159 @@ myslice2 = [0 0 0 0 0], len=5, cap=5
 * **Capacity** (`cap`) = maximum size slice can grow without reallocation.
 * Can be created directly, from arrays, or using `make()`.
 * Provide more flexibility than arrays while retaining type safety.
+
+
+# Go Slices: Access, Modify, Append, and Copy
+
+## Access Slice Elements
+
+Use **indexes** to access elements. Indexes start at `0`.
+
+```go
+package main
+import "fmt"
+
+func main() {
+    prices := []int{10, 20, 30}
+    fmt.Println(prices[0]) // first element
+    fmt.Println(prices[2]) // third element
+}
+```
+
+**Output:**
+
+```
+10
+30
+```
+
+---
+
+## Change Slice Elements
+
+Assign a new value to a specific index to modify it:
+
+```go
+package main
+import "fmt"
+
+func main() {
+    prices := []int{10, 20, 30}
+    prices[2] = 50
+    fmt.Println(prices)
+}
+```
+
+**Output:**
+
+```
+[10 20 50]
+```
+
+---
+
+## Append Elements to a Slice
+
+Use `append()` to add elements at the end:
+
+```go
+package main
+import "fmt"
+
+func main() {
+    myslice := []int{1, 2, 3, 4, 5, 6}
+    myslice = append(myslice, 20, 21)
+    fmt.Println(myslice)
+}
+```
+
+**Output:**
+
+```
+[1 2 3 4 5 6 20 21]
+```
+
+---
+
+## Append One Slice to Another
+
+Use `...` to append all elements from one slice to another:
+
+```go
+package main
+import "fmt"
+
+func main() {
+    s1 := []int{1, 2, 3}
+    s2 := []int{4, 5, 6}
+    s3 := append(s1, s2...)
+    fmt.Println(s3)
+}
+```
+
+**Output:**
+
+```
+[1 2 3 4 5 6]
+```
+
+---
+
+## Change the Length of a Slice
+
+You can **reslice** or **append** to modify a slice’s length:
+
+```go
+package main
+import "fmt"
+
+func main() {
+    arr := [6]int{9, 10, 11, 12, 13, 14}
+    s := arr[1:5]       // slice of array
+    fmt.Println(s, len(s), cap(s)) // [10 11 12 13] 4 5
+
+    s = arr[1:3]        // reslice
+    fmt.Println(s, len(s), cap(s)) // [10 11] 2 5
+
+    s = append(s, 20, 21, 22, 23) // append to increase length
+    fmt.Println(s, len(s), cap(s)) // [10 11 20 21 22 23] 6 10
+}
+```
+
+---
+
+## Copy Slices (Memory Efficiency)
+
+`copy(dest, src)` copies elements from `src` to `dest`. Useful to create a smaller slice from a large array:
+
+```go
+package main
+import "fmt"
+
+func main() {
+    numbers := []int{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
+    needed := numbers[:5]               // select first 5 elements
+    numbersCopy := make([]int, len(needed))
+    copy(numbersCopy, needed)
+
+    fmt.Println(numbersCopy)
+    fmt.Println(len(numbersCopy), cap(numbersCopy))
+}
+```
+
+**Output:**
+
+```
+[1 2 3 4 5]
+5 5
+```
+
+---
+
+### ✅ Key Points
+
+* Slice elements are **accessed and changed** via indexes.
+* Use `append()` to **grow slices**.
+* Use `append(slice1, slice2...)` to **merge slices**.
+* Use `copy()` to **create a new slice with its own underlying array** for memory efficiency.
+* Slices have **length** (`len()`) and **capacity** (`cap()`), which can change with reslicing and appending.
